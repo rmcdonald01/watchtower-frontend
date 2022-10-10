@@ -28,7 +28,7 @@ pipeline {
             steps {
                 script {
                     echo 'deploying to production..'
-                    sh "ssh b_one@38.105.209.235 /home/b_one/sites/watchtower-frontend-deploy"
+                    sh "ssh b_one@38.105.209.235 /home/b_one/sites/watchtower-frontend-deploy/deploy"
 
                 }
             }
