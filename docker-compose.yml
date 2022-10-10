@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  vuexy-start:
+    image: ramon101/my-repo:vuexy-starter
+    container_name: vuexy-starter
+    build: 
+      context: .
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 8080:8080
+  npm:
+    image: node:lts
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
