@@ -252,6 +252,10 @@ export default {
             email: this.userEmail,
             password: this.password,
           }).then(response => {
+            // For testing
+            this.$router.replace(getHomeRouteForLoggedInUser('/'))
+            return
+            // For testing
             const userData = response.data.data
             useJwt.setToken(response.data.meta.token)
             useJwt.setRefreshToken(response.data.meta.token)

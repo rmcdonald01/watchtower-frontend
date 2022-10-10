@@ -11,7 +11,7 @@ export default [
                     active: true,
                 },
             ],
-            resource: 'Auth',
+            resource: 'Guest',
         },
     },
     {
