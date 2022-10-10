@@ -158,7 +158,7 @@ export default {
         minimumFractionDigits: 0
     });
    // this.budgetOverview.spent
-    return formatter.format(346627.88);
+    return formatter.format(346627.88)
     }
   }
 }

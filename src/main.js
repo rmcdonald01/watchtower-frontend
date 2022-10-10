@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
 import VueCompositionAPI from '@vue/composition-api'
+import Vue2Filters from 'vue2-filters'
 
 import router from './router'
 import store from './store'
@@ -21,6 +22,8 @@ Vue.use(ModalPlugin)
 // Composition API
 Vue.use(VueCompositionAPI)
 
+// Extra filters
+Vue.use(Vue2Filters)
 // import core styles
 require('@core/scss/core.scss')
 

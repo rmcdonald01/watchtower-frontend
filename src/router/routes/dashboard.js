@@ -4,7 +4,14 @@ export default [
     name: 'dashboard-finance',
     component: () => import('@/views/dashboard/expense/Finance.vue'),
     meta: {
-      // resource: 'ACL',
+      pageTitle: 'Expense',
+      breadcrumb: [
+        {
+          text: 'Expense',
+          active: true,
+        },
+      ],
+      resource: 'Auth',
       action: 'view-dashboard',
     },
 
