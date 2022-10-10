@@ -41,7 +41,7 @@ const router = new VueRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('@/views/Login.vue'),
+      component: () => import('@/views/authentication/Login.vue'),
       meta: {
         layout: 'full',
       },

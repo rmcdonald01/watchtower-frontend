@@ -4,7 +4,7 @@
 
       <!-- Brand logo-->
       <b-link class="brand-logo">
-        <vuexy-logo />
+        <vuexy-logo/>
         <h2 class="brand-text text-primary ml-1">
           Watchtower
         </h2>
@@ -13,14 +13,14 @@
 
       <!-- Left Text-->
       <b-col
-        lg="8"
-        class="d-none d-lg-flex align-items-center p-5"
+          lg="8"
+          class="d-none d-lg-flex align-items-center p-5"
       >
         <div class="w-100 d-lg-flex align-items-center justify-content-center px-5">
           <b-img
-            fluid
-            :src="imgUrl"
-            alt="Login V2"
+              fluid
+              :src="imgUrl"
+              alt="Login V2"
           />
         </div>
       </b-col>
@@ -28,18 +28,18 @@
 
       <!-- Login-->
       <b-col
-        lg="4"
-        class="d-flex align-items-center auth-bg px-2 p-lg-5"
+          lg="4"
+          class="d-flex align-items-center auth-bg px-2 p-lg-5"
       >
         <b-col
-          sm="8"
-          md="6"
-          lg="12"
-          class="px-xl-2 mx-auto"
+            sm="8"
+            md="6"
+            lg="12"
+            class="px-xl-2 mx-auto"
         >
           <b-card-title
-            title-tag="h2"
-            class="font-weight-bold mb-1"
+              title-tag="h2"
+              class="font-weight-bold mb-1"
           >
             Welcome to Watchtower! 👋
           </b-card-title>
@@ -50,25 +50,25 @@
           <!-- form -->
           <validation-observer ref="loginValidation">
             <b-form
-              class="auth-login-form mt-2"
-              @submit.prevent
+                class="auth-login-form mt-2"
+                @submit.prevent
             >
               <!-- email -->
               <b-form-group
-                label="Email"
-                label-for="login-email"
+                  label="Email"
+                  label-for="login-email"
               >
                 <validation-provider
-                  #default="{ errors }"
-                  name="Email"
-                  rules="required|email"
+                    #default="{ errors }"
+                    name="Email"
+                    rules="required|email"
                 >
                   <b-form-input
-                    id="login-email"
-                    v-model="userEmail"
-                    :state="errors.length > 0 ? false:null"
-                    name="login-email"
-                    placeholder="john@example.com"
+                      id="login-email"
+                      v-model="userEmail"
+                      :state="errors.length > 0 ? false:null"
+                      name="login-email"
+                      placeholder="john@example.com"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -83,28 +83,28 @@
                   </b-link>
                 </div>
                 <validation-provider
-                  #default="{ errors }"
-                  name="Password"
-                  rules="required"
+                    #default="{ errors }"
+                    name="Password"
+                    rules="required"
                 >
                   <b-input-group
-                    class="input-group-merge"
-                    :class="errors.length > 0 ? 'is-invalid':null"
+                      class="input-group-merge"
+                      :class="errors.length > 0 ? 'is-invalid':null"
                   >
                     <b-form-input
-                      id="login-password"
-                      v-model="password"
-                      :state="errors.length > 0 ? false:null"
-                      class="form-control-merge"
-                      :type="passwordFieldType"
-                      name="login-password"
-                      placeholder="············"
+                        id="login-password"
+                        v-model="password"
+                        :state="errors.length > 0 ? false:null"
+                        class="form-control-merge"
+                        :type="passwordFieldType"
+                        name="login-password"
+                        placeholder="············"
                     />
                     <b-input-group-append is-text>
                       <feather-icon
-                        class="cursor-pointer"
-                        :icon="passwordToggleIcon"
-                        @click="togglePasswordVisibility"
+                          class="cursor-pointer"
+                          :icon="passwordToggleIcon"
+                          @click="togglePasswordVisibility"
                       />
                     </b-input-group-append>
                   </b-input-group>
@@ -115,9 +115,9 @@
               <!-- checkbox -->
               <b-form-group>
                 <b-form-checkbox
-                  id="remember-me"
-                  v-model="status"
-                  name="checkbox-1"
+                    id="remember-me"
+                    v-model="status"
+                    name="checkbox-1"
                 >
                   Remember Me
                 </b-form-checkbox>
@@ -125,10 +125,10 @@
 
               <!-- submit buttons -->
               <b-button
-                type="submit"
-                variant="primary"
-                block
-                @click="validationForm"
+                  type="submit"
+                  variant="primary"
+                  block
+                  @click="validationForm"
               >
                 Sign in
               </b-button>
@@ -144,20 +144,35 @@
 
         </b-col>
       </b-col>
-    <!-- /Login-->
+      <!-- /Login-->
     </b-row>
   </div>
 </template>
 
 <script>
 /* eslint-disable global-require */
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import {ValidationProvider, ValidationObserver} from 'vee-validate'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
+import useJwt from '@/auth/jwt/useJwt'
+import {getHomeRouteForLoggedInUser} from '@/auth/utils'
+
 import {
-  BRow, BCol, BLink, BFormGroup, BFormInput, BInputGroupAppend, BInputGroup, BFormCheckbox, BCardText, BCardTitle, BImg, BForm, BButton,
+  BRow,
+  BCol,
+  BLink,
+  BFormGroup,
+  BFormInput,
+  BInputGroupAppend,
+  BInputGroup,
+  BFormCheckbox,
+  BCardText,
+  BCardTitle,
+  BImg,
+  BForm,
+  BButton,
 } from 'bootstrap-vue'
-import { required, email } from '@validations'
-import { togglePasswordVisibility } from '@core/mixins/ui/forms'
+import {required, email} from '@validations'
+import {togglePasswordVisibility} from '@core/mixins/ui/forms'
 import store from '@/store/index'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
@@ -209,13 +224,26 @@ export default {
     validationForm() {
       this.$refs.loginValidation.validate().then(success => {
         if (success) {
-          this.$toast({
-            component: ToastificationContent,
-            props: {
-              title: 'Form Submitted',
-              icon: 'EditIcon',
-              variant: 'success',
-            },
+          useJwt.login({
+            email: this.userEmail,
+            password: this.password,
+          }).then(response => {
+            const userData = response.data.data
+            useJwt.setToken(response.data.meta.token)
+            useJwt.setRefreshToken(response.data.meta.token)
+            localStorage.setItem('userData', JSON.stringify(userData))
+            this.$router.replace(getHomeRouteForLoggedInUser(userData.role)).then(() => {
+              this.$toast({
+                component: ToastificationContent,
+                position: 'top-right',
+                props: {
+                  title: `Welcome ${userData.fullName}`,
+                  icon: 'CoffeeIcon',
+                  variant: 'success',
+                  text: `You have successfully logged in as ${userData.role}. Now you can start to explore!`,
+                },
+              })
+            })
           })
         }
       })
