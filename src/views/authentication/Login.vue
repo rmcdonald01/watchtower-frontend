@@ -171,10 +171,11 @@ import {
   BForm,
   BButton,
 } from 'bootstrap-vue'
-import {required, email} from '@validations'
-import {togglePasswordVisibility} from '@core/mixins/ui/forms'
+import { required, email } from '@validations'
+import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import store from '@/store/index'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import { setUser } from '@/services/stateful/userService'
 
 export default {
   components: {
@@ -232,6 +233,8 @@ export default {
             useJwt.setToken(response.data.meta.token)
             useJwt.setRefreshToken(response.data.meta.token)
             localStorage.setItem('userData', JSON.stringify(userData))
+            setUser(userData)
+            this.$ability.update(userData.ability)
             this.$router.replace(getHomeRouteForLoggedInUser(userData.role)).then(() => {
               this.$toast({
                 component: ToastificationContent,
