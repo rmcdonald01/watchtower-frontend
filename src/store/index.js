@@ -5,6 +5,9 @@ import Vuex from 'vuex'
 import app from './app'
 import appConfig from './app-config'
 import verticalMenu from './vertical-menu'
+import expense from './expense/expenseStoreModule'
+import category from './category/categoryStoreModule'
+import budget from './budget/storeModule'
 
 Vue.use(Vuex)
 
@@ -13,6 +16,9 @@ export default new Vuex.Store({
     app,
     appConfig,
     verticalMenu,
+    expense,
+    category,
+    budget,
   },
   strict: process.env.DEV,
 })

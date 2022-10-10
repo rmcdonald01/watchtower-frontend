@@ -4,6 +4,7 @@ import authentication from '@/router/routes/authentication'
 import others from '@/router/routes/others'
 import { canNavigate } from '@/libs/acl/routeProtection'
 import { isUserLoggedIn, getUserData, getHomeRouteForLoggedInUser } from '@/auth/utils'
+import dashboard from '@/router/routes/dashboard'
 
 Vue.use(VueRouter)
 
@@ -14,6 +15,7 @@ const router = new VueRouter({
     return { x: 0, y: 0 }
   },
   routes: [
+    ...dashboard,
     ...authentication,
     ...others,
   ],
