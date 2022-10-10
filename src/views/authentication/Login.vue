@@ -112,6 +112,24 @@
                 </validation-provider>
               </b-form-group>
 
+              <b-form-group>
+                <b-alert
+
+                    variant="danger"
+                    :show="show"
+                    class="mb-0"
+                >
+                  <div class="alert-body">
+                    <feather-icon
+                        icon="InfoIcon"
+                        class="mr-50"
+                    />
+
+                    {{ errorMessage }}
+                  </div>
+                </b-alert>
+              </b-form-group>
+
               <!-- checkbox -->
               <b-form-group>
                 <b-form-checkbox
@@ -151,10 +169,10 @@
 
 <script>
 /* eslint-disable global-require */
-import {ValidationProvider, ValidationObserver} from 'vee-validate'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import useJwt from '@/auth/jwt/useJwt'
-import {getHomeRouteForLoggedInUser} from '@/auth/utils'
+import { getHomeRouteForLoggedInUser } from '@/auth/utils'
 
 import {
   BRow,
@@ -170,12 +188,14 @@ import {
   BImg,
   BForm,
   BButton,
+  BAlert,
 } from 'bootstrap-vue'
 import { required, email } from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import store from '@/store/index'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { setUser } from '@/services/stateful/userService'
+import { is404, is422, is401, is403 } from '@/libs/utils/response'
 
 export default {
   components: {
@@ -192,6 +212,7 @@ export default {
     BImg,
     BForm,
     BButton,
+    BAlert,
     VuexyLogo,
     ValidationProvider,
     ValidationObserver,
@@ -202,6 +223,8 @@ export default {
       status: '',
       password: '',
       userEmail: '',
+      show: false,
+      errorMessage: '',
       sideImg: require('@/assets/images/pages/login-v2.svg'),
       // validation rulesimport store from '@/store/index'
       required,
@@ -247,6 +270,15 @@ export default {
                 },
               })
             })
+          }).catch(error => {
+            if (is422(error)) {
+              this.show = true
+              this.errorMessage = error.response.data.errors.email
+            }
+            if (is403(error)) {
+              this.show = true
+              this.errorMessage = error.response.data.errors.verify_email
+            }
           })
         }
       })
