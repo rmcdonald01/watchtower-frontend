@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref, computed } from '@vue/composition-api'
 import { upperFirst } from 'lodash-es'
 import { apiStatus } from '../constants/apiStatus'
 
@@ -50,15 +50,16 @@ export const useApi = (apiName, fn, config = {}) => {
   const exec = async (...args) => {
     try {
       status.value = PENDING
+      console.log(...args);
       const response = await fn(...args)
       data.value =
         typeof responseAdapter === 'function'
           ? responseAdapter(response)
           : response
       status.value = SUCCESS
-    } catch (error) {
-      error.value = error
-      status.value = ERROR
+    } catch (err) {
+        error.value = err
+       status.value = ERROR
     }
   }
 

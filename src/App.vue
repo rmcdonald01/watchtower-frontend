@@ -22,6 +22,10 @@ import useAppConfig from '@core/app-config/useAppConfig'
 import { useWindowSize, useCssVar } from '@vueuse/core'
 
 import store from '@/store'
+import { setUser } from '@/services/stateful/userService'
+import { fetchUserGeneralInformation } from '@/api/userProfile'
+import { isUserLoggedIn } from '@/auth/utils'
+import { useApi } from '@/api'
 
 const LayoutVertical = () => import('@/layouts/vertical/LayoutVertical.vue')
 const LayoutHorizontal = () => import('@/layouts/horizontal/LayoutHorizontal.vue')
@@ -92,6 +96,34 @@ export default {
     watch(windowWidth, val => {
       store.commit('app/UPDATE_WINDOW_WIDTH', val)
     })
+
+    // Setting user data
+    const {
+      data: userGeneralData,
+      status,
+      setStatus,
+      error: Err,
+      exec: fetchUserGeneralInformationData,
+      fetchUserGeneralInformationStatusIdle,
+      fetchUserGeneralInformationStatusPending,
+      fetchUserGeneralInformationStatusSuccess,
+      fetchUserGeneralInformationStatusError,
+    } = useApi('fetchUserGeneralInformation', fetchUserGeneralInformation, {
+      initialData: null,
+      responseAdapter: response => response.data,
+    })
+
+    // check if user is logined in first
+    if (isUserLoggedIn()) {
+      fetchUserGeneralInformationData()
+
+      watch(userGeneralData, val => {
+        if(fetchUserGeneralInformationStatusSuccess.value){
+          setUser(userGeneralData.value)
+        }
+
+      })
+    }
 
     return {
       skinClasses,

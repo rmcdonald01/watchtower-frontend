@@ -195,7 +195,9 @@ import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import store from '@/store/index'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { setUser } from '@/services/stateful/userService'
-import { is404, is422, is401, is403 } from '@/libs/utils/response'
+import {
+  is404, is422, is401, is403,
+} from '@/libs/utils/response'
 
 export default {
   components: {
@@ -252,10 +254,6 @@ export default {
             email: this.userEmail,
             password: this.password,
           }).then(response => {
-            // For testing
-            this.$router.replace(getHomeRouteForLoggedInUser('/'))
-            return
-            // For testing
             const userData = response.data.data
             useJwt.setToken(response.data.meta.token)
             useJwt.setRefreshToken(response.data.meta.token)
