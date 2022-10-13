@@ -116,7 +116,7 @@
                 <b-alert
 
                     variant="danger"
-                    :show="show"
+                    :show="loginStatusError"
                     class="mb-0"
                 >
                   <div class="alert-body">
@@ -147,8 +147,12 @@
                   variant="primary"
                   block
                   @click="validationForm"
+                  :disabled="loginStatusPending"
               >
-                Sign in
+                <span v-if="!loginStatusPending">Sign in</span>
+                <b-spinner v-if="loginStatusPending" small />
+                <span v-if="loginStatusPending">Loading...</span>
+
               </b-button>
             </b-form>
           </validation-observer>
@@ -178,6 +182,7 @@ import {
   BRow,
   BCol,
   BLink,
+  BSpinner,
   BFormGroup,
   BFormInput,
   BInputGroupAppend,
@@ -198,12 +203,20 @@ import { setUser } from '@/services/stateful/userService'
 import {
   is404, is422, is401, is403,
 } from '@/libs/utils/response'
+import {apiStatusComputedFactory, apiStatus } from '@/api'
+const {
+  IDLE,
+  ERROR,
+  SUCCESS,
+  PENDING,
+} = apiStatus
 
 export default {
   components: {
     BRow,
     BCol,
     BLink,
+    BSpinner,
     BFormGroup,
     BFormInput,
     BInputGroupAppend,
@@ -231,6 +244,7 @@ export default {
       // validation rulesimport store from '@/store/index'
       required,
       email,
+      loginStatus: IDLE,
     }
   },
   computed: {
@@ -245,9 +259,11 @@ export default {
       }
       return this.sideImg
     },
+    ...apiStatusComputedFactory('loginStatus'),
   },
   methods: {
     validationForm() {
+      this.loginStatus = PENDING
       this.$refs.loginValidation.validate().then(success => {
         if (success) {
           useJwt.login({
@@ -260,6 +276,7 @@ export default {
             localStorage.setItem('userData', JSON.stringify(userData))
             setUser(userData)
             this.$ability.update(userData.ability)
+            this.loginStatus = SUCCESS
             this.$router.replace(getHomeRouteForLoggedInUser(userData.role)).then(() => {
               this.$toast({
                 component: ToastificationContent,
@@ -273,15 +290,19 @@ export default {
               })
             })
           }).catch(error => {
+            this.loginStatus = ERROR
             if (is422(error)) {
-              this.show = true
               this.errorMessage = error.response.data.errors.email
+              return
             }
             if (is403(error)) {
-              this.show = true
               this.errorMessage = error.response.data.errors.verify_email
+              return
             }
+            this.errorMessage = 'Error. Please try again later.'
           })
+        } else {
+          this.loginStatus = IDLE
         }
       })
     },

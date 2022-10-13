@@ -107,8 +107,11 @@
                 variant="primary"
                 class="mr-1"
                 @click="addExpense(expense)"
+                :disabled="storeExpenseStatusPending"
               >
-                Submit
+                <span v-if="!storeExpenseStatusPending">Submit</span>
+                <b-spinner v-if="storeExpenseStatusPending" small />
+                <span v-if="storeExpenseStatusPending">Submitting...</span>
               </b-button>
               <b-button
                 v-ripple.400="'rgba(186, 191, 199, 0.15)'"
@@ -126,11 +129,21 @@
 </template>
 
 <script>
-import { ref, onUnmounted } from '@vue/composition-api';
-import store from '@/store';
+
+import { useApi, apiStatusComputedFactory, apiStatus } from '@/api'
+import { storeExpense } from '@/api/expenseApi'
+
+const {
+  IDLE,
+  PENDING,
+  SUCCESS,
+  ERROR,
+} = apiStatus
+
 import {
   BRow,
   BCol,
+  BSpinner,
   BFormGroup,
   BFormInput,
   BForm,
@@ -153,6 +166,7 @@ export default {
     vSelect,
     BRow,
     BCol,
+    BSpinner,
     BFormGroup,
     BFormInput,
     BForm,
@@ -173,52 +187,49 @@ export default {
       expense: {},
       text: '',
       selected: '',
-      countryName: [
-        { value: 'Russia', title: 'Russia' },
-        { value: 'Canada', title: 'Canada' },
-        { value: 'China', title: 'China' },
-        { value: 'United States', title: 'United States' },
-        { value: 'Brazil', title: 'Brazil' },
-        { value: 'Australia', title: 'Australia' },
-        { value: 'India', title: 'India' },
-      ],
+      storeExpenseStatus: IDLE,
     }
   },
   computed: {
     categories() {
-      return this.$store.state.category.categories.data;
+      return this.$store.state.category.categories.data
     },
+    ...apiStatusComputedFactory('storeExpenseStatus'),
   },
   created() {
-    // if (!moduleDataList.isRegistered) {
-    //  // this.$store.registerModule('dataList', moduleDataList1)
-    //   moduleDataList.isRegistered = true
-    // }
-    this.$store.dispatch('category/fetchCategories');
+    this.$store.dispatch('category/fetchCategories')
   },
   methods: {
     addExpense(data) {
-      this.expense.category_id = this.selected.value;
+      this.storeExpenseStatus = PENDING
+      this.expense.category_id = this.selected.value
       this.$refs.simpleRules.validate().then(success => {
+        // userApi
+        // useApi('storeExpense', storeExpense(this.expense))
+
         if (success) {
           this.$store
             .dispatch('expense/addExpense', this.expense)
-            .then(response => {
-              this.selected = '';
+            .then((response) => {
+              this.storeExpenseStatus = SUCCESS
+              this.selected = ''
               this.expense = {
                 description: '',
                 amount: '',
-                category: ''
-              };
-              this.showToast('success', 'bottom-right');
+                category: '',
+              }
+              this.showToast('success', 'bottom-right')
               this.$nextTick(() => {
-                this.$refs.simpleRules.reset();
-              });
-            });
+                this.$refs.simpleRules.reset()
+              })
+            }).catch(() => {
+              this.storeExpenseStatus = IDLE
+            })
         } else {
-          console.log('Validation failed');
+          this.storeExpenseStatus = IDLE
+          console.log('Validation failed')
         }
-      });
+      })
     },
     showToast(variant, position) {
       this.$toast(
@@ -234,10 +245,10 @@ export default {
         {
           position
         }
-      );
+      )
     }
   }
-};
+}
 </script>
 
 <style lang="scss">
