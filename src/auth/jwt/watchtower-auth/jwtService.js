@@ -44,7 +44,7 @@ export default class JwtService {
         const originalRequest = config
 
         // Log user out once 401 error
-        if (!this.isTokenExpired && (response && response.status === 401)) {
+        if (response && response.status === 401) {
           this.isTokenExpired = true
           this.removeRefreshToken()
           this.removeToken()
@@ -106,5 +106,17 @@ export default class JwtService {
     return this.axiosIns.post(this.jwtConfig.refreshEndpoint, {
       refreshToken: this.getRefreshToken(),
     })
+  }
+
+  removeRefreshToken() {
+    return localStorage.removeItem(this.jwtConfig.storageRefreshTokenKeyName)
+  }
+
+  removeToken() {
+    localStorage.removeItem(this.jwtConfig.storageTokenKeyName)
+  }
+
+  removeUserData() {
+    localStorage.removeItem('userData')
   }
 }
