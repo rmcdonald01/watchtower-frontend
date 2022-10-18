@@ -11,10 +11,9 @@ import axios from '@axios'
 
 export default {
 
-  
-  //Development working example
+  // Development working example
 
-  fetchExpenses ({ commit }, queryParams) {
+  fetchExpenses({ commit }, queryParams) {
     return new Promise((resolve, reject) => {
       axios.get('/api/expense', { params: queryParams })
         .then((response) => {
