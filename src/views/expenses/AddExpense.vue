@@ -77,6 +77,34 @@
             </b-col>
 
             <b-col cols="12">
+              <validation-provider
+                #default="{ errors }"
+                name="Type"
+                rules="required"
+              >
+                <b-form-group
+                  label="Type"
+                  label-for="h-category"
+                  label-cols-md="4"
+                  :state="errors.length > 0 ? false : null"
+                >
+                  <v-select
+                    id="type"
+                    v-model="selectedType"
+                    :options="transactionTypes"
+                    :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                    label="title"
+                  />
+                  <b-form-invalid-feedback
+                    :state="errors.length > 0 ? false : null"
+                  >
+                    {{ errors[0] }}
+                  </b-form-invalid-feedback>
+                </b-form-group>
+              </validation-provider>
+            </b-col>
+
+            <b-col cols="12">
               <b-form-group
                 label="Description"
                 label-for="h-description"
@@ -131,6 +159,7 @@
 <script>
 
 import { useApi, apiStatusComputedFactory, apiStatus } from '@/api'
+import { getTransactionTypes } from '@/api/transactionType'
 import { storeExpense } from '@/api/expenseApi'
 
 const {
@@ -187,6 +216,8 @@ export default {
       expense: {},
       text: '',
       selected: '',
+      selectedType: '',
+      transactionTypes: [],
       storeExpenseStatus: IDLE,
     }
   },
@@ -198,25 +229,28 @@ export default {
   },
   created() {
     this.$store.dispatch('category/fetchCategories')
+    getTransactionTypes().then(response => {
+      this.transactionTypes = response.data.data
+    })
   },
   methods: {
     addExpense(data) {
       this.storeExpenseStatus = PENDING
       this.expense.category_id = this.selected.value
+      this.expense.transaction_type_id = this.selectedType.value
       this.$refs.simpleRules.validate().then(success => {
-        // userApi
-        // useApi('storeExpense', storeExpense(this.expense))
-
         if (success) {
           this.$store
             .dispatch('expense/addExpense', this.expense)
             .then((response) => {
               this.storeExpenseStatus = SUCCESS
               this.selected = ''
+              this.selectedType = ''
               this.expense = {
                 description: '',
                 amount: '',
                 category: '',
+
               }
               this.showToast('success', 'bottom-right')
               this.$nextTick(() => {
@@ -246,7 +280,7 @@ export default {
           position
         }
       )
-    }
+    },
   }
 }
 </script>
