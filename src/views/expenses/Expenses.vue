@@ -27,7 +27,7 @@
                 cols="6"
                 md="6"
                 class="d-flex align-items-center justify-content-end">
-                <b-button variant="primary" :to="{ name: 'finance-expense-create' }">
+                <b-button variant="primary" :to="{ name: 'home' }">
                     Create Expense
                 </b-button>
 
