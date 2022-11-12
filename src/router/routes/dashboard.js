@@ -16,4 +16,21 @@ export default [
     },
 
   },
+  {
+    path: '/expense',
+    name: 'expense-index',
+    component: () => import('@/views/expenses/Expenses.vue'),
+    meta: {
+      pageTitle: 'Expense',
+      breadcrumb: [
+        {
+          text: 'Expense',
+          active: true,
+        },
+      ],
+      resource: 'Auth',
+      action: 'view-expenses',
+    },
+
+  },
 ]

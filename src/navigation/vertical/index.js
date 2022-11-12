@@ -15,4 +15,9 @@ export default [
     route: 'second-page',
     icon: 'FileIcon',
   },
+  {
+    title: 'Expense',
+    route: 'expense-index',
+    icon: 'FileIcon',
+  },
 ]

@@ -238,15 +238,15 @@ import {
   BPagination,
   BTooltip,
   BFormDatepicker,
-} from 'bootstrap-vue';
-import { avatarText } from '@core/utils/filter';
-import vSelect from 'vue-select';
-import { onUnmounted } from '@vue/composition-api';
-import store from '@/store';
-import useExpenseService from './services/expenseService';
-import expenseListFilters from "@/views/finance/expenses/components/expense-list/ExpenseListFilters";
+} from 'bootstrap-vue'
+import { avatarText } from '@core/utils/filter'
+import vSelect from 'vue-select'
+import { onUnmounted } from '@vue/composition-api'
+import store from '@/store'
+import useExpenseService from './services/expenseService'
+import expenseListFilters from "@/views/expenses/components/expense-list/ExpenseListFilters";
 import {apiStatus, apiStatusComputedFactory} from '@/api'
-import {withAsync} from '@/libs/helpers/withAsync'
+// import {withAsync} from '@/libs/helpers/withAsync'
 import flatPickr from 'vue-flatpickr-component'
 
 export default {
@@ -286,24 +286,6 @@ export default {
         store.unregisterModule(INVOICE_APP_STORE_MODULE_NAME);
     });
 
-    // const statusOptions = [
-    // 'Auto & Transport',
-    // 'Bills & Utilities',
-    // 'Business Services',
-    // 'Education',
-    // 'Entertainment',
-    // 'Fees & Charges',
-    // 'Food & Dining',
-    // 'Gifts & Donations',
-    // 'Health & Fitness',
-    // 'Investments',
-    // 'Kids',
-    // 'Personal Care',
-    // 'Shopping',
-    // 'Taxes',
-    // 'Travel',
-    // ]
-
     const {
       fetchInvoices,
       fetchCategories,
@@ -326,9 +308,9 @@ export default {
       resolveClientAvatarVariant,
       deleteExpense,
       rangeDate,
-    } = useExpenseService();
+    } = useExpenseService()
 
-    fetchCategories();
+    fetchCategories()
 
     return {
       fetchInvoices,
@@ -350,7 +332,7 @@ export default {
 
       refetchData,
 
-      //statusOptions,
+      // statusOptions,
       expenses,
       avatarText,
       resolveInvoiceStatusVariantAndIcon,
